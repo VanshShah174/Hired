@@ -12,7 +12,7 @@ const JobListing = () => {
   const { isLoaded } = useUser();
 
   const {
-    fn: fnjobs,
+    fn: fnJobs,
     data: jobs,
     loading: loadingJobs,
   } = useFetch(getJobs, {
@@ -22,7 +22,7 @@ const JobListing = () => {
   });
 
   useEffect(() => {
-    if (isLoaded) fnjobs();
+    if (isLoaded) fnJobs();
   }, [isLoaded, location, company_id, searchQuery]);
 
   if (!isLoaded) {
@@ -41,19 +41,23 @@ const JobListing = () => {
         <BarLoader className="mt-4" width={"100%"} color="#36d7b7" />
       )}
 
-      { loadingJobs === false && (
+      {loadingJobs === false && (
         <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {jobs?.length ? (
-            jobs.map((job)=>{
-              return <JobCard key={job.id} job={job} />
+            jobs.map((job) => {
+              return (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  savedInit={job?.saved?.length > 0}
+                />
+              );
             })
           ) : (
             <div> No Jobs Found 😢 </div>
-          )
-          }
-          </div>
+          )}
+        </div>
       )}
-
     </div>
   );
 };

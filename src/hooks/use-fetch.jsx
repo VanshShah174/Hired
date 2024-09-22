@@ -16,7 +16,6 @@ const useFetch = (cb, options = {}) => {
       const supabaseAccessToken = await session.getToken({
         template: "supabase",
       });
-
       const response = await cb(supabaseAccessToken, options, ...args);
       setData(response);
       setError(null);
@@ -27,7 +26,7 @@ const useFetch = (cb, options = {}) => {
     }
   };
 
-  return { fn, data, loading, error };
+  return { data, loading, error, fn };
 };
 
 export default useFetch;
