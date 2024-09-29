@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { updateHiringStatus } from "@/api/apiJobs";
 import ApplyJobDrawer from "@/components/apply-job";
+import ApplicationCard from "@/components/application-card";
 
 const JobPage = () => {
   const { isLoaded, user } = useUser();
@@ -28,7 +29,6 @@ const JobPage = () => {
     job_id: id,
   });
 
-
   const { loading: loadingHiringStatus, fn: fnHiringStatus } = useFetch(
     updateHiringStatus,
     {
@@ -40,7 +40,6 @@ const JobPage = () => {
     const isOpen = value === "open";
     fnHiringStatus(isOpen).then(() => fnJob());
   };
-
 
   useEffect(() => {
     if (isLoaded) fnJob();
@@ -81,7 +80,7 @@ const JobPage = () => {
       </div>
 
       {/* hiring Status */}
-       {job?.recruiter_id === user?.id && (
+      {job?.recruiter_id === user?.id && (
         <Select onValueChange={handleStatusChange}>
           <SelectTrigger
             className={`w-full ${job?.isOpen ? "bg-green-950" : "bg-red-950"}`}
@@ -111,14 +110,27 @@ const JobPage = () => {
       />
 
       {/* Render Applications */}
-     { job?.recruiter_id !== user?.id && 
-     <ApplyJobDrawer 
-     job={job}
-     user={user}
-     fetchJob = {fnJob}
-     applied = {job?.applications?.find((ap)=> ap.candidate_id === user.id)}
-     />
-     }
+      {job?.recruiter_id !== user?.id && (
+        <ApplyJobDrawer
+          job={job}
+          user={user}
+          fetchJob={fnJob}
+          applied={job?.applications?.find((ap) => ap.candidate_id === user.id)}
+        />
+      )}
+
+      {job?.applications?.length > 0 && job?.recruiter_id === user?.id && (
+        <div className="flex flex-col gap-2">
+           <h2 className="text-2xl sm:text-3xl font-fold">Applications</h2>
+           {job?.applications.map((application) =>{
+            return <ApplicationCard
+            key={application.id}
+            application={application}
+            
+            />
+           })}
+        </div>
+      )}
     </div>
   );
 };
