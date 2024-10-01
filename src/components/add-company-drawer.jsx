@@ -1,25 +1,21 @@
 import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-  } from "@/components/ui/drawer";
-  import { Button } from "./ui/button";
-  import { Input } from "./ui/input";
-  import { z } from "zod";
-  import { zodResolver } from "@hookform/resolvers/zod";
-  import { useForm } from "react-hook-form";
-  import useFetch from "@/hooks/use-fetch";
-  import { addNewCompany } from "@/api/apiCompanies";
-  import { BarLoader } from "react-spinners";
-  import { useEffect } from "react";
-  
-
-
-  
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import useFetch from "@/hooks/use-fetch";
+import { addNewCompany } from "@/api/apiCompanies";
+import { BarLoader } from "react-spinners";
+import { useEffect } from "react";
 
 const schema = z.object({
   name: z.string().min(1, { message: "Company name is required" }),
@@ -41,7 +37,7 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
   } = useForm({
     resolver: zodResolver(schema),
   });
-  
+
   const {
     loading: loadingAddCompany,
     error: errorAddCompany,
@@ -55,7 +51,6 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
       logo: data.logo[0],
     });
   };
-
   useEffect(() => {
     if (dataAddCompany?.length > 0) {
       fetchCompanies();
@@ -66,7 +61,7 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
     <Drawer>
       <DrawerTrigger>
         <Button type="button" size="sm" variant="secondary">
-            Add Company
+          Add Company
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -97,8 +92,7 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
           </Button>
         </form>
         <DrawerFooter>
-
-        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
           {errors.logo && <p className="text-red-500">{errors.logo.message}</p>}
           {errorAddCompany?.message && (
             <p className="text-red-500">{errorAddCompany?.message}</p>
@@ -106,12 +100,14 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
           {loadingAddCompany && <BarLoader width={"100%"} color="#36d7b7" />}
 
           <DrawerClose asChild>
-            <Button variant="secondary" type="button ">Cancel</Button>
+            <Button variant="secondary" type="button ">
+              Cancel
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
-}; 
+};
 
 export default AddCompanyDrawer;
