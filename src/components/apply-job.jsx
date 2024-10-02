@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -9,13 +10,12 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { z } from "zod";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Label } from "./ui/label";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import useFetch from "@/hooks/use-fetch";
 import { applyToJob } from "@/api/apiApplications";
 import { BarLoader } from "react-spinners";
@@ -26,7 +26,7 @@ const schema = z.object({
     .min(0, { message: "Experience must be at least 0" })
     .int(),
   skills: z.string().min(1, { message: "Skills are required" }),
-  education: z.enum(["Intermediate", "Graduate", "Post Graduate "], {
+  education: z.enum(["Intermediate", "Graduate", "Post Graduate"], {
     message: "Education is required",
   }),
   resume: z
@@ -36,11 +36,11 @@ const schema = z.object({
         file[0] &&
         (file[0].type === "application/pdf" ||
           file[0].type === "application/msword"),
-      { message: "Only PDF on word documents are allowed" }
+      { message: "Only PDF or Word documents are allowed" }
     ),
 });
 
-const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
+export function ApplyJobDrawer({ user, job, fetchJob, applied = false }) {
   const {
     register,
     handleSubmit,
@@ -65,10 +65,10 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
       name: user.fullName,
       status: "applied",
       resume: data.resume[0],
-    }).then(()=>{
+    }).then(() => {
       fetchJob();
       reset();
-    })
+    });
   };
 
   return (
@@ -87,7 +87,7 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
           <DrawerTitle>
             Apply for {job?.title} at {job?.company?.name}
           </DrawerTitle>
-          <DrawerDescription>Please fill the form below.</DrawerDescription>
+          <DrawerDescription>Please Fill the form below</DrawerDescription>
         </DrawerHeader>
 
         <form
@@ -102,29 +102,25 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
               valueAsNumber: true,
             })}
           />
-
           {errors.experience && (
             <p className="text-red-500">{errors.experience.message}</p>
           )}
-
           <Input
             type="text"
             placeholder="Skills (Comma Separated)"
             className="flex-1"
             {...register("skills")}
           />
-
           {errors.skills && (
-            <p className="text-red-500">{errors.experience.message}</p>
+            <p className="text-red-500">{errors.skills.message}</p>
           )}
-
           <Controller
             name="education"
             control={control}
             render={({ field }) => (
               <RadioGroup onValueChange={field.onChange} {...field}>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="I0ntermediate" id="intermediate" />
+                  <RadioGroupItem value="Intermediate" id="intermediate" />
                   <Label htmlFor="intermediate">Intermediate</Label>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -138,26 +134,21 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
               </RadioGroup>
             )}
           />
-
           {errors.education && (
             <p className="text-red-500">{errors.education.message}</p>
           )}
-
           <Input
             type="file"
-            accept=".pdf, .doc , .docx"
+            accept=".pdf, .doc, .docx"
             className="flex-1 file:text-gray-500"
             {...register("resume")}
           />
-
           {errors.resume && (
             <p className="text-red-500">{errors.resume.message}</p>
           )}
-
           {errorApply?.message && (
             <p className="text-red-500">{errorApply?.message}</p>
           )}
-
           {loadingApply && <BarLoader width={"100%"} color="#36d7b7" />}
           <Button type="submit" variant="blue" size="lg">
             Apply
@@ -172,6 +163,4 @@ const ApplyJobDrawer = ({ user, job, applied = false, fetchJob }) => {
       </DrawerContent>
     </Drawer>
   );
-};
-
-export default ApplyJobDrawer;
+}

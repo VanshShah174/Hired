@@ -60,7 +60,7 @@ export async function applyToJob(token,_,jobData) {
     .select("*,job:jobs(title,company:companies(name))");
   
     if (error) {
-      console.error("Error Fetching Applications:", error);
+      console.error("Error Fetching Applications Status:", error);
       return null;
     }
   
