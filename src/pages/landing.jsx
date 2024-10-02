@@ -4,7 +4,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/Carousel";
+} from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay";
 import companies from "../data/companies.json";
 import faqs from "../data/faqs.json";
