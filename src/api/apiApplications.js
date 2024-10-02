@@ -51,3 +51,18 @@ export async function applyToJob(token,_,jobData) {
   
     return data;
   }
+
+  export async function getApplications(token,{user_id}
+  ) {
+    const supabase = await supabaseClient(token);
+    const { data, error } = await supabase.from("applications")
+    .eq("candidate_id",user_id)
+    .select("*,job:jobs(title,company:companies(name))");
+  
+    if (error) {
+      console.error("Error Fetching Applications:", error);
+      return null;
+    }
+  
+    return data;
+  }
