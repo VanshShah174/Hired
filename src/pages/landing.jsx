@@ -7,11 +7,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/Carousel";
+
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import companies from "../data/companies.json";
 import Autoplay from "embla-carousel-autoplay";
 import faqs from "../data/faqs.json";
